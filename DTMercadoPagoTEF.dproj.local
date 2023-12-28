@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/11/17 08:27:48.000.563,=rtl.dcp</Transaction>
+    <Transaction>2023/11/17 08:28:07.000.011,C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\DTMercadoPagoTEF.dproj=C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>2023/11/17 08:28:42.000.443,D:\Dropbox\Componentes\DTMercadoPagoTEF\DTMercadoPagoTEF.dproj=C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\DTMercadoPagoTEF.dproj</Transaction>
+    <Transaction>2023/11/17 08:29:44.000.965,=D:\Dropbox\Componentes\DTMercadoPagoTEF\MercadoPagoTEF.pas</Transaction>
+  </Transactions>
+</BorlandProject>

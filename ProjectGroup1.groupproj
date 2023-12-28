@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{51C40935-E2AE-42DF-AA4E-5A7AB443B483}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="DTMercadoPagoTEF.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="demo\DemoMercadoPago.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DTMercadoPagoTEF">
+        <MSBuild Projects="DTMercadoPagoTEF.dproj"/>
+    </Target>
+    <Target Name="DTMercadoPagoTEF:Clean">
+        <MSBuild Projects="DTMercadoPagoTEF.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DTMercadoPagoTEF:Make">
+        <MSBuild Projects="DTMercadoPagoTEF.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DemoMercadoPago">
+        <MSBuild Projects="demo\DemoMercadoPago.dproj"/>
+    </Target>
+    <Target Name="DemoMercadoPago:Clean">
+        <MSBuild Projects="demo\DemoMercadoPago.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DemoMercadoPago:Make">
+        <MSBuild Projects="demo\DemoMercadoPago.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DTMercadoPagoTEF;DemoMercadoPago"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DTMercadoPagoTEF:Clean;DemoMercadoPago:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DTMercadoPagoTEF:Make;DemoMercadoPago:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
