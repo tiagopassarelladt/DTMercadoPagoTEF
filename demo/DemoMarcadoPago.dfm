@@ -16,7 +16,7 @@ object Form1: TForm1
     Top = 0
     Width = 603
     Height = 597
-    ActivePage = TabSheet4
+    ActivePage = TabSheet1
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
@@ -8906,7 +8906,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        Text = '8955286240925737'
       end
       object edtClientSecret: TEdit
         Left = 78
@@ -8920,7 +8919,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        Text = 'vZPCLj2QplqDYJo6lJzHyMY9X9sW8q7C'
       end
       object edtRedirectUrl: TEdit
         Left = 78
@@ -8934,7 +8932,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 2
-        Text = 'https://www.passarellasistemas.com.br'
       end
       object edtTGCode: TEdit
         Left = 78
@@ -8948,7 +8945,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 3
-        Text = 'TG-6557ec5035ceb900012148f6-289283150'
       end
       object Memo1: TMemo
         Left = 3
@@ -8977,9 +8973,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 5
-        Text = 
-          'APP_USR-8955286240925737-111719-a4beb12aa54f4795aa323cda0a001516' +
-          '-289283150'
       end
       object edtRefreshToken: TEdit
         Left = 3
@@ -8993,7 +8986,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 6
-        Text = 'TG-6557f98682482f0001a50cf9-289283150'
       end
       object btLimparCampos: TButton
         Left = 328
@@ -27150,6 +27142,7 @@ object Form1: TForm1
         Align = alTop
         Caption = 'Panel5'
         TabOrder = 0
+        ExplicitWidth = 591
         object Image7: TImage
           Left = 396
           Top = 8
@@ -36150,6 +36143,8 @@ object Form1: TForm1
         Align = alClient
         Caption = 'Panel6'
         TabOrder = 1
+        ExplicitWidth = 591
+        ExplicitHeight = 293
         object Label28: TLabel
           Left = 8
           Top = 11
