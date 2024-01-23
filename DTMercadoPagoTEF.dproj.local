@@ -2,8 +2,14 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2023/11/17 08:27:48.000.563,=rtl.dcp</Transaction>
-    <Transaction>2023/11/17 08:28:07.000.011,C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\Package1.dproj=C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\DTMercadoPagoTEF.dproj</Transaction>
-    <Transaction>2023/11/17 08:28:42.000.443,C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\DTMercadoPagoTEF.dproj=D:\Dropbox\Componentes\DTMercadoPagoTEF\DTMercadoPagoTEF.dproj</Transaction>
+    <Transaction>2023/11/17 08:28:07.000.011,C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\DTMercadoPagoTEF.dproj=C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>2023/11/17 08:28:42.000.443,D:\Dropbox\Componentes\DTMercadoPagoTEF\DTMercadoPagoTEF.dproj=C:\Users\tiago\OneDrive\Documentos\Embarcadero\Studio\Projects\DTMercadoPagoTEF.dproj</Transaction>
     <Transaction>2023/11/17 08:29:44.000.965,=D:\Dropbox\Componentes\DTMercadoPagoTEF\MercadoPagoTEF.pas</Transaction>
+    <Transaction>2024/01/23 11:27:13.000.442,=vcl.dcp</Transaction>
+    <Transaction>2024/01/23 11:27:13.000.446,=DTPix.dcp</Transaction>
+    <Transaction>2024/01/23 11:30:37.000.244,=D:\Dropbox\Componentes\DTMercadoPagoTEF\ZXIngQRCode.pas</Transaction>
+    <Transaction>2024/01/23 11:36:08.000.760,D:\Dropbox\Componentes\DTMercadoPagoTEF\ZXIngQRCode.pas=D:\Dropbox\Componentes\DTMercadoPagoTEF\ZXIngQRCode.pas</Transaction>
+    <Transaction>2024/01/23 11:36:40.000.773,D:\Dropbox\Componentes\DTMercadoPagoTEF\ZXIngQRCodeX.Xpas=D:\Dropbox\Componentes\DTMercadoPagoTEF\ZXIngQRCode.Xpas</Transaction>
+    <Transaction>2024/01/23 11:57:30.000.986,D:\Dropbox\Componentes\DTMercadoPagoTEF\ZXIngQRCodeX.pas=</Transaction>
   </Transactions>
 </BorlandProject>

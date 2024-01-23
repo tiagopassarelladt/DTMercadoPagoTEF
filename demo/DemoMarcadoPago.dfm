@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Demo DTMercadopagoTEF'
   ClientHeight = 597
-  ClientWidth = 603
+  ClientWidth = 695
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,8 +14,9 @@ object Form1: TForm1
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 603
+    Width = 695
     Height = 597
+    Cursor = crHandPoint
     ActivePage = TabSheet1
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
@@ -25,7 +26,7 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 599
+    ExplicitWidth = 691
     ExplicitHeight = 596
     object TabSheet1: TTabSheet
       Caption = 'Credenciais'
@@ -56,8 +57,8 @@ object Form1: TForm1
         ParentFont = False
       end
       object Label3: TLabel
-        Left = 3
-        Top = 16
+        Left = 11
+        Top = -2
         Width = 102
         Height = 15
         Caption = 'Credenciais OAuth'
@@ -8893,6 +8894,19 @@ object Form1: TForm1
         Stretch = True
         Transparent = True
       end
+      object Label54: TLabel
+        Left = 11
+        Top = 22
+        Width = 61
+        Height = 15
+        Caption = 'User ID SH: '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
       object edtClientId: TEdit
         Left = 78
         Top = 48
@@ -8949,7 +8963,7 @@ object Form1: TForm1
       object Memo1: TMemo
         Left = 3
         Top = 297
-        Width = 582
+        Width = 689
         Height = 248
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clNavy
@@ -8963,7 +8977,7 @@ object Form1: TForm1
       object edtAccessToken: TEdit
         Left = 3
         Top = 185
-        Width = 582
+        Width = 689
         Height = 23
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -8977,7 +8991,7 @@ object Form1: TForm1
       object edtRefreshToken: TEdit
         Left = 3
         Top = 237
-        Width = 582
+        Width = 689
         Height = 23
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clNavy
@@ -9027,6 +9041,19 @@ object Form1: TForm1
         TabOrder = 10
         OnClick = btnAutorizarAppClick
       end
+      object edtUserID_SH: TEdit
+        Left = 78
+        Top = 19
+        Width = 235
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 11
+      end
     end
     object TabSheet5: TTabSheet
       Caption = 'Dispositivos'
@@ -9034,7 +9061,7 @@ object Form1: TForm1
       object Panel1: TPanel
         Left = 0
         Top = 122
-        Width = 595
+        Width = 687
         Height = 445
         Align = alClient
         BevelOuter = bvNone
@@ -9047,7 +9074,7 @@ object Form1: TForm1
         object Label10: TLabel
           Left = 5
           Top = 5
-          Width = 585
+          Width = 677
           Height = 15
           Align = alTop
           Caption = 'Resposta:'
@@ -9062,7 +9089,7 @@ object Form1: TForm1
         object Memo2: TMemo
           Left = 5
           Top = 20
-          Width = 585
+          Width = 677
           Height = 420
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
@@ -9078,7 +9105,7 @@ object Form1: TForm1
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 595
+        Width = 687
         Height = 122
         Align = alTop
         BevelOuter = bvNone
@@ -17871,7 +17898,7 @@ object Form1: TForm1
         object GroupBox1: TGroupBox
           Left = 11
           Top = 60
-          Width = 542
+          Width = 679
           Height = 58
           Caption = '4 - Alterar Modo de Opera'#231#227'o'
           TabOrder = 1
@@ -17892,7 +17919,7 @@ object Form1: TForm1
             TabOrder = 1
           end
           object btnModoOperacao: TButton
-            Left = 416
+            Left = 544
             Top = 21
             Width = 118
             Height = 25
@@ -17924,7 +17951,7 @@ object Form1: TForm1
       object Panel3: TPanel
         Left = 0
         Top = 0
-        Width = 595
+        Width = 687
         Height = 322
         Align = alTop
         Caption = 'Panel3'
@@ -17956,7 +17983,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object lbParcelas: TLabel
-          Left = 248
+          Left = 353
           Top = 0
           Width = 46
           Height = 15
@@ -17970,7 +17997,7 @@ object Form1: TForm1
           Visible = False
         end
         object lbCustoParcelas: TLabel
-          Left = 248
+          Left = 353
           Top = 50
           Width = 150
           Height = 15
@@ -17984,7 +18011,7 @@ object Form1: TForm1
           Visible = False
         end
         object Label13: TLabel
-          Left = 427
+          Left = 532
           Top = 0
           Width = 54
           Height = 15
@@ -17997,7 +18024,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label14: TLabel
-          Left = 427
+          Left = 532
           Top = 50
           Width = 58
           Height = 15
@@ -18010,7 +18037,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label16: TLabel
-          Left = 167
+          Left = 272
           Top = 121
           Width = 112
           Height = 15
@@ -18023,7 +18050,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label17: TLabel
-          Left = 186
+          Left = 291
           Top = 164
           Width = 47
           Height = 15
@@ -18036,7 +18063,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label18: TLabel
-          Left = 346
+          Left = 451
           Top = 164
           Width = 69
           Height = 15
@@ -18049,7 +18076,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label19: TLabel
-          Left = 180
+          Left = 285
           Top = 204
           Width = 53
           Height = 15
@@ -18062,7 +18089,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label20: TLabel
-          Left = 444
+          Left = 549
           Top = 204
           Width = 26
           Height = 15
@@ -18075,7 +18102,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label21: TLabel
-          Left = 389
+          Left = 494
           Top = 244
           Width = 81
           Height = 15
@@ -18088,7 +18115,7 @@ object Form1: TForm1
           ParentFont = False
         end
         object Label22: TLabel
-          Left = 421
+          Left = 526
           Top = 284
           Width = 49
           Height = 15
@@ -26897,7 +26924,7 @@ object Form1: TForm1
           OnClick = rbCreditoClick
         end
         object edtParcelas: TEdit
-          Left = 248
+          Left = 353
           Top = 21
           Width = 46
           Height = 23
@@ -26924,7 +26951,7 @@ object Form1: TForm1
           OnClick = btCriarPagtoClick
         end
         object cbCustoParcelas: TComboBox
-          Left = 248
+          Left = 353
           Top = 71
           Width = 147
           Height = 23
@@ -26941,7 +26968,7 @@ object Form1: TForm1
             'Cliente')
         end
         object edtDescricao: TEdit
-          Left = 427
+          Left = 532
           Top = 21
           Width = 150
           Height = 23
@@ -26957,7 +26984,7 @@ object Form1: TForm1
           Text = 'Pedido 001'
         end
         object edtReferencia: TEdit
-          Left = 427
+          Left = 532
           Top = 71
           Width = 150
           Height = 23
@@ -26983,7 +27010,7 @@ object Form1: TForm1
           TabOrder = 8
         end
         object edtIntencaoPagto: TEdit
-          Left = 285
+          Left = 390
           Top = 118
           Width = 292
           Height = 23
@@ -27007,7 +27034,7 @@ object Form1: TForm1
           OnClick = btStatusPagtoClick
         end
         object edtIdPagto: TEdit
-          Left = 239
+          Left = 344
           Top = 161
           Width = 101
           Height = 23
@@ -27020,7 +27047,7 @@ object Form1: TForm1
           TabOrder = 11
         end
         object edtStatusPagto: TEdit
-          Left = 421
+          Left = 526
           Top = 161
           Width = 156
           Height = 23
@@ -27043,7 +27070,7 @@ object Form1: TForm1
           OnClick = btBuscarPagamentoClick
         end
         object edtCodAutorizacao: TEdit
-          Left = 239
+          Left = 344
           Top = 201
           Width = 101
           Height = 23
@@ -27056,7 +27083,7 @@ object Form1: TForm1
           TabOrder = 14
         end
         object edtTaxa: TEdit
-          Left = 476
+          Left = 581
           Top = 201
           Width = 101
           Height = 23
@@ -27069,7 +27096,7 @@ object Form1: TForm1
           TabOrder = 15
         end
         object edtValorRecebido: TEdit
-          Left = 476
+          Left = 581
           Top = 241
           Width = 101
           Height = 23
@@ -27082,7 +27109,7 @@ object Form1: TForm1
           TabOrder = 16
         end
         object edtBandeira: TEdit
-          Left = 476
+          Left = 581
           Top = 281
           Width = 101
           Height = 23
@@ -27098,7 +27125,7 @@ object Form1: TForm1
       object Panel4: TPanel
         Left = 0
         Top = 328
-        Width = 591
+        Width = 695
         Height = 223
         Caption = 'Panel4'
         TabOrder = 1
@@ -27118,7 +27145,7 @@ object Form1: TForm1
         object Memo3: TMemo
           Left = 0
           Top = 24
-          Width = 589
+          Width = 689
           Height = 193
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -27137,12 +27164,11 @@ object Form1: TForm1
       object Panel5: TPanel
         Left = 0
         Top = 0
-        Width = 595
+        Width = 687
         Height = 273
         Align = alTop
         Caption = 'Panel5'
         TabOrder = 0
-        ExplicitWidth = 591
         object Image7: TImage
           Left = 396
           Top = 8
@@ -36138,13 +36164,11 @@ object Form1: TForm1
       object Panel6: TPanel
         Left = 0
         Top = 273
-        Width = 595
+        Width = 687
         Height = 294
         Align = alClient
         Caption = 'Panel6'
         TabOrder = 1
-        ExplicitWidth = 591
-        ExplicitHeight = 293
         object Label28: TLabel
           Left = 8
           Top = 11
@@ -36161,7 +36185,7 @@ object Form1: TForm1
         object Memo4: TMemo
           Left = 0
           Top = 32
-          Width = 589
+          Width = 689
           Height = 241
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -44953,7 +44977,7 @@ object Form1: TForm1
       object Memo5: TMemo
         Left = 0
         Top = 112
-        Width = 589
+        Width = 692
         Height = 436
         Font.Charset = ANSI_CHARSET
         Font.Color = clNavy
@@ -44975,11 +44999,705 @@ object Form1: TForm1
         OnClick = btListarTransacoesClick
       end
     end
+    object TabSheet6: TTabSheet
+      Caption = 'PIX - Criar Loja / Caixa'
+      ImageIndex = 5
+      object Label33: TLabel
+        Left = 6
+        Top = 3
+        Width = 71
+        Height = 15
+        Caption = 'Nome da loja'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label34: TLabel
+        Left = 324
+        Top = 3
+        Width = 49
+        Height = 15
+        Caption = 'ID da loja'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label35: TLabel
+        Left = 6
+        Top = 46
+        Width = 49
+        Height = 15
+        Caption = 'Endereco'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label36: TLabel
+        Left = 133
+        Top = 46
+        Width = 42
+        Height = 15
+        Caption = 'n'#250'mero'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label37: TLabel
+        Left = 197
+        Top = 46
+        Width = 37
+        Height = 15
+        Caption = 'Cidade'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label38: TLabel
+        Left = 324
+        Top = 46
+        Width = 14
+        Height = 15
+        Caption = 'UF'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label39: TLabel
+        Left = 451
+        Top = 3
+        Width = 40
+        Height = 15
+        Caption = 'latitude'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label40: TLabel
+        Left = 527
+        Top = 3
+        Width = 51
+        Height = 15
+        Caption = 'longitude'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label42: TLabel
+        Left = 11
+        Top = 315
+        Width = 50
+        Height = 15
+        Caption = 'Resposta:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label43: TLabel
+        Left = 117
+        Top = 92
+        Width = 48
+        Height = 15
+        Caption = 'id da loja'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label41: TLabel
+        Left = 6
+        Top = 166
+        Width = 82
+        Height = 15
+        Caption = 'Nome do Caixa'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label44: TLabel
+        Left = 133
+        Top = 166
+        Width = 59
+        Height = 15
+        Caption = 'Id do Caixa'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label45: TLabel
+        Left = 260
+        Top = 166
+        Width = 35
+        Height = 15
+        Caption = 'id Loja'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label46: TLabel
+        Left = 387
+        Top = 166
+        Width = 102
+        Height = 15
+        Caption = 'id numerico da loja'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label47: TLabel
+        Left = 117
+        Top = 241
+        Width = 57
+        Height = 15
+        Caption = 'id do caixa'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Button2: TButton
+        Left = 488
+        Top = 61
+        Width = 105
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '1 - Criar Loja'
+        TabOrder = 0
+        OnClick = Button2Click
+      end
+      object edtNomeLoja: TEdit
+        Left = 6
+        Top = 19
+        Width = 312
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        Text = 'LOJA DE TESTE'
+      end
+      object edtIDLoja: TEdit
+        Left = 324
+        Top = 19
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        Text = 'LJTESTE'
+      end
+      object edtEndereco: TEdit
+        Left = 6
+        Top = 63
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        Text = 'RUA NENE'
+      end
+      object edtNumero: TEdit
+        Left = 133
+        Top = 63
+        Width = 58
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        Text = '660'
+      end
+      object edtCidade: TEdit
+        Left = 197
+        Top = 63
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        Text = 'Extrema'
+      end
+      object edtUF: TEdit
+        Left = 324
+        Top = 63
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+        Text = 'Minas Gerais'
+      end
+      object edtLatitude: TEdit
+        Left = 451
+        Top = 19
+        Width = 70
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
+        Text = '-22.857347'
+      end
+      object edtLongitude: TEdit
+        Left = 527
+        Top = 19
+        Width = 66
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 8
+        Text = '-46.315648'
+      end
+      object mRespPIX: TMemo
+        Left = 11
+        Top = 336
+        Width = 681
+        Height = 217
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ScrollBars = ssVertical
+        TabOrder = 9
+      end
+      object Button3: TButton
+        Left = 488
+        Top = 108
+        Width = 105
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '2 - Buscar lojas'
+        TabOrder = 10
+        OnClick = Button3Click
+      end
+      object Button4: TButton
+        Left = 6
+        Top = 108
+        Width = 105
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '3 - Excluir loja'
+        TabOrder = 11
+        OnClick = Button4Click
+      end
+      object edtIDLojaExcluir: TEdit
+        Left = 117
+        Top = 109
+        Width = 328
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 12
+      end
+      object edtNomeCaixa: TEdit
+        Left = 6
+        Top = 183
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 13
+        Text = 'Caixa 1 teste'
+      end
+      object edtIDCaixa: TEdit
+        Left = 133
+        Top = 183
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 14
+        Text = 'Caixa0001'
+      end
+      object edtIdLojaCaixa: TEdit
+        Left = 260
+        Top = 183
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 15
+        Text = 'LJTESTE'
+      end
+      object edtIDNumericoLoja: TEdit
+        Left = 387
+        Top = 183
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 16
+      end
+      object Button5: TButton
+        Left = 3
+        Top = 212
+        Width = 105
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '1 - Criar Caixa'
+        TabOrder = 17
+        OnClick = Button5Click
+      end
+      object Button6: TButton
+        Left = 114
+        Top = 212
+        Width = 105
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '2 - Buscar caixas'
+        TabOrder = 18
+        OnClick = Button6Click
+      end
+      object Button7: TButton
+        Left = 6
+        Top = 257
+        Width = 105
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '3 - Excluir Caixa'
+        TabOrder = 19
+        OnClick = Button7Click
+      end
+      object edtIDCaixaExcluir: TEdit
+        Left = 117
+        Top = 258
+        Width = 391
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 20
+      end
+    end
+    object TabSheet7: TTabSheet
+      Caption = 'PIX - Transa'#231#245'es'
+      ImageIndex = 6
+      object Label48: TLabel
+        Left = 3
+        Top = 6
+        Width = 63
+        Height = 15
+        Caption = 'n'#186' da venda'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label49: TLabel
+        Left = 130
+        Top = 6
+        Width = 102
+        Height = 15
+        Caption = 'Descricao da venda'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label50: TLabel
+        Left = 257
+        Top = 6
+        Width = 64
+        Height = 15
+        Caption = 'Razao social'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label51: TLabel
+        Left = 384
+        Top = 6
+        Width = 57
+        Height = 15
+        Caption = 'external_id'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label52: TLabel
+        Left = 511
+        Top = 6
+        Width = 26
+        Height = 15
+        Caption = 'valor'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label53: TLabel
+        Left = 8
+        Top = 326
+        Width = 50
+        Height = 15
+        Caption = 'Resposta:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object imQrCode: TImage
+        Left = 439
+        Top = 52
+        Width = 193
+        Height = 180
+      end
+      object Label55: TLabel
+        Left = 151
+        Top = 107
+        Width = 60
+        Height = 15
+        Caption = 'payment id'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Button8: TButton
+        Left = 3
+        Top = 61
+        Width = 142
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '1 - Criar pagamento'
+        TabOrder = 0
+        OnClick = Button8Click
+      end
+      object edtNumvenda: TEdit
+        Left = 3
+        Top = 23
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        Text = '123'
+      end
+      object edtDescVenda: TEdit
+        Left = 130
+        Top = 23
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        Text = 'Venda de teste'
+      end
+      object edtEmpresa: TEdit
+        Left = 257
+        Top = 23
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        Text = 'empresa teste'
+      end
+      object edtExternalID: TEdit
+        Left = 384
+        Top = 23
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        Text = 'Caixa0001'
+      end
+      object edtValPIX: TEdit
+        Left = 511
+        Top = 23
+        Width = 121
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        Text = '2,50'
+      end
+      object mRepPIX: TMemo
+        Left = 3
+        Top = 347
+        Width = 681
+        Height = 217
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        ScrollBars = ssVertical
+        TabOrder = 6
+      end
+      object Button9: TButton
+        Left = 3
+        Top = 92
+        Width = 142
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '2 - Buscar Pagamento'
+        TabOrder = 7
+        OnClick = Button9Click
+      end
+      object Button10: TButton
+        Left = 3
+        Top = 123
+        Width = 142
+        Height = 25
+        Cursor = crHandPoint
+        Caption = '3 - Busca Pgto detalhado'
+        TabOrder = 8
+        OnClick = Button10Click
+      end
+      object edtPaymentID: TEdit
+        Left = 151
+        Top = 124
+        Width = 227
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 9
+      end
+    end
   end
   object DTMercadoPagoTEF1: TDTMercadoPagoTEF
     HabilitaControleToken = False
     HabilitaLOG = False
-    Left = 280
-    Top = 394
+    Left = 204
+    Top = 218
   end
 end

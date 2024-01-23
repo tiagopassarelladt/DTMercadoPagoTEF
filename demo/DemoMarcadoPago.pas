@@ -4,7 +4,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, IdHTTP, IdSSLOpenSSL,
   IdSSLOpenSSLHeaders, REST.Types, REST.Client, REST.Json, System.JSON, Vcl.ExtCtrls,
-  Vcl.Imaging.jpeg, Vcl.Imaging.pngimage, MercadoPagoTEF;
+  Vcl.Imaging.jpeg, Vcl.Imaging.pngimage, MercadoPagoTEF,ZXIngQRCodeX;
 type
   TForm1 = class(TForm)
     PageControl1: TPageControl;
@@ -108,7 +108,65 @@ type
     Image9: TImage;
     btListarTransacoes: TButton;
     btnAutorizarApp: TButton;
+    TabSheet6: TTabSheet;
+    Button2: TButton;
+    edtNomeLoja: TEdit;
+    edtIDLoja: TEdit;
+    edtEndereco: TEdit;
+    edtNumero: TEdit;
+    edtCidade: TEdit;
+    edtUF: TEdit;
+    edtLatitude: TEdit;
+    edtLongitude: TEdit;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label39: TLabel;
+    Label40: TLabel;
+    Label42: TLabel;
+    mRespPIX: TMemo;
+    Button3: TButton;
+    Button4: TButton;
+    edtIDLojaExcluir: TEdit;
+    Label43: TLabel;
+    Label41: TLabel;
+    edtNomeCaixa: TEdit;
+    Label44: TLabel;
+    edtIDCaixa: TEdit;
+    Label45: TLabel;
+    edtIdLojaCaixa: TEdit;
+    Label46: TLabel;
+    edtIDNumericoLoja: TEdit;
+    Button5: TButton;
+    Button6: TButton;
+    Button7: TButton;
+    Label47: TLabel;
+    edtIDCaixaExcluir: TEdit;
+    TabSheet7: TTabSheet;
+    Button8: TButton;
+    edtNumvenda: TEdit;
+    Label48: TLabel;
+    edtDescVenda: TEdit;
+    Label49: TLabel;
+    edtEmpresa: TEdit;
+    Label50: TLabel;
+    edtExternalID: TEdit;
+    Label51: TLabel;
+    edtValPIX: TEdit;
+    Label52: TLabel;
+    Label54: TLabel;
+    edtUserID_SH: TEdit;
+    mRepPIX: TMemo;
+    Label53: TLabel;
+    Button9: TButton;
+    Button10: TButton;
+    imQrCode: TImage;
     DTMercadoPagoTEF1: TDTMercadoPagoTEF;
+    edtPaymentID: TEdit;
+    Label55: TLabel;
     procedure btLimparCamposClick(Sender: TObject);
     procedure btListarDevicesClick(Sender: TObject);
     procedure btnAccessTokenClick(Sender: TObject);
@@ -124,6 +182,15 @@ type
     procedure Button1Click(Sender: TObject);
     procedure btListarTransacoesClick(Sender: TObject);
     procedure btnAutorizarAppClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
   private
     procedure ConfiguraComponente;
   public
@@ -199,6 +266,13 @@ begin
            Memo3.Lines.Add(e.Message);
     end;
 end;
+procedure TForm1.Button10Click(Sender: TObject);
+begin
+      mRepPIX.Lines.Clear;
+      ConfiguraComponente;
+      mRepPIX.Text := DTMercadoPagoTEF1.PIXBuscaPagamentoDetalhado(edtPaymentID.Text);
+end;
+
 procedure TForm1.Button1Click(Sender: TObject);
 begin
     Memo4.Lines.Clear;
@@ -212,10 +286,201 @@ begin
           Memo4.Lines.Add(e.Message);
     end;
 end;
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+     mRespPIX.Lines.Clear;
+     ConfiguraComponente;
+     DTMercadoPagoTEF1.PIXCriarLoja(edtNomeLoja.Text,
+                                    edtIDLoja.Text,
+                                    edtEndereco.Text,
+                                    edtNumero.Text,
+                                    edtCidade.Text,
+                                    edtUF.Text,
+                                    edtLatitude.Text,
+                                    edtLongitude.Text,
+                                    '');
+
+     mRespPIX.Lines.Add('id: '            +  DTMercadoPagoTEF1.DadosLoja[0].id );
+     mRespPIX.Lines.Add('name: '          +  DTMercadoPagoTEF1.DadosLoja[0].name );
+     mRespPIX.Lines.Add('date_creation: ' +  DTMercadoPagoTEF1.DadosLoja[0].date_creation );
+     mRespPIX.Lines.Add('address_line: '  +  DTMercadoPagoTEF1.DadosLoja[0].address_line );
+     mRespPIX.Lines.Add('reference: '     +  DTMercadoPagoTEF1.DadosLoja[0].reference );
+     mRespPIX.Lines.Add('latitude: '      +  DTMercadoPagoTEF1.DadosLoja[0].latitude.ToString );
+     mRespPIX.Lines.Add('longitude: '     +  DTMercadoPagoTEF1.DadosLoja[0].longitude.ToString );
+     mRespPIX.Lines.Add('city: '          +  DTMercadoPagoTEF1.DadosLoja[0].city );
+     mRespPIX.Lines.Add('state_id: '      +  DTMercadoPagoTEF1.DadosLoja[0].state_id );
+     mRespPIX.Lines.Add('external_id: '   +  DTMercadoPagoTEF1.DadosLoja[0].external_id );
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var
+  I: Integer;
+begin
+      mRespPIX.Lines.Clear;
+      ConfiguraComponente;
+      DTMercadoPagoTEF1.PIXBuscarLojas;
+
+      for I := 0 to pred( DTMercadoPagoTEF1.DadosLoja.Count ) do
+      begin
+          mRespPIX.Lines.Add('id: '            +  DTMercadoPagoTEF1.DadosLoja[i].id );
+          mRespPIX.Lines.Add('name: '          +  DTMercadoPagoTEF1.DadosLoja[i].name );
+          mRespPIX.Lines.Add('date_creation: ' +  DTMercadoPagoTEF1.DadosLoja[i].date_creation );
+          mRespPIX.Lines.Add('address_line: '  +  DTMercadoPagoTEF1.DadosLoja[i].address_line );
+          mRespPIX.Lines.Add('reference: '     +  DTMercadoPagoTEF1.DadosLoja[i].reference );
+          mRespPIX.Lines.Add('latitude: '      +  DTMercadoPagoTEF1.DadosLoja[i].latitude.ToString );
+          mRespPIX.Lines.Add('longitude: '     +  DTMercadoPagoTEF1.DadosLoja[i].longitude.ToString );
+          mRespPIX.Lines.Add('city: '          +  DTMercadoPagoTEF1.DadosLoja[i].city );
+          mRespPIX.Lines.Add('state_id: '      +  DTMercadoPagoTEF1.DadosLoja[i].state_id );
+          mRespPIX.Lines.Add('external_id: '   +  DTMercadoPagoTEF1.DadosLoja[i].external_id );
+          mRespPIX.Lines.Add( StringOfChar('=', 60) );
+      end;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+     mRespPIX.Lines.Clear;
+     ConfiguraComponente;
+     DTMercadoPagoTEF1.PIXExcluirLoja(edtIDLojaExcluir.Text);
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+var
+i : Integer;
+begin
+     mRespPIX.Lines.Clear;
+     ConfiguraComponente;
+     DTMercadoPagoTEF1.PIXCriarCaixa(edtIDCaixa.Text,
+                                     edtNomeCaixa.Text,
+                                     edtIdLojaCaixa.Text,
+                                     edtIDNumericoLoja.Text);
+
+     for I := 0 to pred( DTMercadoPagoTEF1.DadosCaixa.Count ) do
+     begin
+          mRespPIX.Lines.Add('image: '             +  DTMercadoPagoTEF1.DadosCaixa[i].image );
+          mRespPIX.Lines.Add('template_document: ' +  DTMercadoPagoTEF1.DadosCaixa[i].template_document );
+          mRespPIX.Lines.Add('template_image: '    +  DTMercadoPagoTEF1.DadosCaixa[i].template_image );
+          mRespPIX.Lines.Add('id: '                +  DTMercadoPagoTEF1.DadosCaixa[i].id );
+          mRespPIX.Lines.Add('status: '            +  DTMercadoPagoTEF1.DadosCaixa[i].status );
+          mRespPIX.Lines.Add('date_created: '      +  DTMercadoPagoTEF1.DadosCaixa[i].date_created );
+          mRespPIX.Lines.Add('date_last_updated: ' +  DTMercadoPagoTEF1.DadosCaixa[i].date_last_updated );
+          mRespPIX.Lines.Add('uuid: '              +  DTMercadoPagoTEF1.DadosCaixa[i].uuid );
+          mRespPIX.Lines.Add('user_id: '           +  DTMercadoPagoTEF1.DadosCaixa[i].user_id );
+          mRespPIX.Lines.Add('name: '              +  DTMercadoPagoTEF1.DadosCaixa[i].name );
+          mRespPIX.Lines.Add('store_id: '          +  DTMercadoPagoTEF1.DadosCaixa[i].store_id );
+          mRespPIX.Lines.Add('external_store_id: ' +  DTMercadoPagoTEF1.DadosCaixa[i].external_store_id );
+          mRespPIX.Lines.Add('site: '              +  DTMercadoPagoTEF1.DadosCaixa[i].site );
+          mRespPIX.Lines.Add('qr_code: '           +  DTMercadoPagoTEF1.DadosCaixa[i].qr_code );
+          mRespPIX.Lines.Add( StringOfChar('=', 60) );
+     end;
+end;
+
+procedure TForm1.Button6Click(Sender: TObject);
+var
+i : Integer;
+begin
+     mRespPIX.Lines.Clear;
+     ConfiguraComponente;
+     DTMercadoPagoTEF1.PIXBuscarCaixa;
+
+     for I := 0 to pred( DTMercadoPagoTEF1.DadosCaixa.Count ) do
+     begin
+          mRespPIX.Lines.Add('image: '             +  DTMercadoPagoTEF1.DadosCaixa[i].image );
+          mRespPIX.Lines.Add('template_document: ' +  DTMercadoPagoTEF1.DadosCaixa[i].template_document );
+          mRespPIX.Lines.Add('template_image: '    +  DTMercadoPagoTEF1.DadosCaixa[i].template_image );
+          mRespPIX.Lines.Add('id: '                +  DTMercadoPagoTEF1.DadosCaixa[i].id );
+          mRespPIX.Lines.Add('status: '            +  DTMercadoPagoTEF1.DadosCaixa[i].status );
+          mRespPIX.Lines.Add('date_created: '      +  DTMercadoPagoTEF1.DadosCaixa[i].date_created );
+          mRespPIX.Lines.Add('date_last_updated: ' +  DTMercadoPagoTEF1.DadosCaixa[i].date_last_updated );
+          mRespPIX.Lines.Add('uuid: '              +  DTMercadoPagoTEF1.DadosCaixa[i].uuid );
+          mRespPIX.Lines.Add('user_id: '           +  DTMercadoPagoTEF1.DadosCaixa[i].user_id );
+          mRespPIX.Lines.Add('name: '              +  DTMercadoPagoTEF1.DadosCaixa[i].name );
+          mRespPIX.Lines.Add('store_id: '          +  DTMercadoPagoTEF1.DadosCaixa[i].store_id );
+          mRespPIX.Lines.Add('external_store_id: ' +  DTMercadoPagoTEF1.DadosCaixa[i].external_store_id );
+          mRespPIX.Lines.Add('site: '              +  DTMercadoPagoTEF1.DadosCaixa[i].site );
+          mRespPIX.Lines.Add('qr_code: '           +  DTMercadoPagoTEF1.DadosCaixa[i].qr_code );
+          mRespPIX.Lines.Add( StringOfChar('=', 60) );
+     end;
+
+end;
+
+procedure TForm1.Button7Click(Sender: TObject);
+begin
+    mRespPIX.Lines.Clear;
+    ConfiguraComponente;
+    DTMercadoPagoTEF1.PIXExcluirCaixa(edtIDCaixaExcluir.Text);
+end;
+
+procedure TForm1.Button8Click(Sender: TObject);
+VAR
+  QRCode            : TDelphiZXingQRCode;
+  Row, Column       : Integer;
+  imgXQrCode        : TBitmap;
+  Scale             : Double;
+begin
+      mRepPIX.Lines.Clear;
+      ConfiguraComponente;
+      DTMercadoPagoTEF1.PIXCriarPagamento(edtNumvenda.Text,edtDescVenda.Text,edtEmpresa.Text,edtExternalID.Text,StrToFloat(edtValPIX.Text));
+
+      mRepPIX.Lines.Add('in_store_order_id: ' + DTMercadoPagoTEF1.DadosPgtoPIX.in_store_order_id);
+      mRepPIX.Lines.Add('qr_data: '           + DTMercadoPagoTEF1.DadosPgtoPIX.qr_data);
+
+      // CARREGAR QRCODE PARA LEITURA
+      QRCode           := TDelphiZXingQRCode.Create;
+      QRCode.Encoding  := qrISO88591;
+      QRCode.QuietZone := 4;
+      QRCode.Data      := DTMercadoPagoTEF1.DadosPgtoPIX.qr_data;
+      imgXQrCode       := TBitmap.Create;
+      imgXQrCode.SetSize(QRCode.Rows, QRCode.Columns);
+      for Row := 0 to QRCode.Rows - 1 do
+      begin
+        for Column := 0 to QRCode.Columns - 1 do
+        begin
+          if (QRCode.IsBlack[Row, Column]) then
+          begin
+            imgXQrCode.Canvas.Pixels[Column, Row] := clBlack;
+          end else
+          begin
+            imgXQrCode.Canvas.Pixels[Column, Row] := clWhite;
+          end;
+        end;
+      end;
+      imQrCode.Canvas.Brush.Color := clWhite;
+      imQrCode.Canvas.FillRect(Rect(0, 0, imgXQrCode.Width, imgXQrCode.Height));
+      if (imQrCode.Width < imQrCode.Height) then
+      begin
+        Scale := imQrCode.Width / imgXQrCode.Width;
+      end else
+      begin
+        Scale := imQrCode.Height / imgXQrCode.Height;
+      end;
+      imQrCode.Canvas.StretchDraw(Rect(0, 0, Trunc(Scale * imgXQrCode.Width), Trunc(Scale * imgXQrCode.Height)), imgXQrCode);
+
+      imgXQrCode.Free;
+      QRCode.Free;
+end;
+
+procedure TForm1.Button9Click(Sender: TObject);
+var
+  I: Integer;
+begin
+      mRepPIX.Lines.Clear;
+      ConfiguraComponente;
+      DTMercadoPagoTEF1.PIXBuscaPagamento(edtNumvenda.Text);
+      for I := 0 to Pred( DTMercadoPagoTEF1.PixDetalhes.Count ) do
+      begin
+          mRepPIX.Lines.Add( 'id: '                 + DTMercadoPagoTEF1.PixDetalhes[i].id );
+          mRepPIX.Lines.Add( 'external_reference: ' + DTMercadoPagoTEF1.PixDetalhes[i].external_reference );
+          mRepPIX.Lines.Add( 'status: '             + DTMercadoPagoTEF1.PixDetalhes[i].status );
+          mRepPIX.Lines.Add( 'total_paid_amount: '  + DTMercadoPagoTEF1.PixDetalhes[i].total_paid_amount.ToString );
+          mRepPIX.Lines.Add( StringOfChar('=',60));
+      end;
+end;
+
 procedure TForm1.ConfiguraComponente;
 begin
       DTMercadoPagoTEF1.ClientID              := edtClientId.Text;
       DTMercadoPagoTEF1.ClientSecret          := edtClientSecret.Text;
+      DTMercadoPagoTEF1.UserID_SH             := edtUserID_SH.Text;
       DTMercadoPagoTEF1.RedirectURL           := edtRedirectUrl.Text;
       DTMercadoPagoTEF1.TGCode                := edtTGCode.Text;
       DTMercadoPagoTEF1.AccessToken           := edtAccessToken.Text;

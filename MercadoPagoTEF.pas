@@ -20,6 +20,15 @@ const
    _PAYMENT_GET                : string = '/v1/payments/{payment_id}';
    _REFOUND_CREATE             : string = '/v1/payments/{payment_id}/refunds';
    _REFOUND_GET                : string = '/v1/payments/{payment_id}/refunds/{reembolso_id}';
+   _CRIAR_LOJA_PIX             : string = '/users/{seller_id}/stores';
+   _BUSCAR_LOJA_PIX            : string = '/users/{seller_id}/stores/search';
+   _EXCLUIR_LOJA_PIX           : string = '/users/{seller_id}/stores/{store_id}';
+   _CRIAR_CAIXA_PIX            : string = '/pos';
+   _BUSCAR_CAIXA_PIX           : string = '/pos';
+   _EXCLUIR_CAIXA_PIX          : string = '/pos/{caixa_id}';
+   _CRIAR_PGTO_PIX             : string = '/instore/orders/qr/seller/collectors/{seller_id}/pos/{external_id}/qrs';
+   _BUSCAR_PGTO_PIX            : string = '/merchant_orders/?external_reference={external_reference}';
+   _BUSCAR_PGTO_PIX_DETALHADAO : string = '/v1/payments/{payment_id}';
 
 type TmodoOperacao = (tmopPDV, tmopSTANDALONE);
 type TipoCartao = (tpcardDEBITO, tbcardCREDITO);
@@ -108,6 +117,54 @@ type TListaPagamentos = class
       id_intPayment      : string;
 end;
 
+type TDadosLoja = class
+    Mensagem : string;
+    id: string;
+    name: string;
+    date_creation: string;
+    address_line: string;
+    reference: string;
+    latitude: Double;
+    longitude: Double;
+    city: string;
+    state_id: string;
+    external_id: string;
+end;
+
+type TdadosCaixa = class
+    mensagem : String;
+    image: string;
+    template_document: string;
+    template_image: string;
+    id: string;
+    status: string;
+    date_created: string;
+    date_last_updated: string;
+    uuid: string;
+    user_id: string;
+    name: string;
+    fixed_amount: Boolean;
+    store_id: string;
+    external_store_id: string;
+    external_id: string;
+    site: string;
+    qr_code: string;
+  end;
+
+type TPgtoPIX = record
+    Mensagem          : string;
+    in_store_order_id : string;
+    qr_data           : string;
+end;
+
+type TDadosPgtoPIX = class
+    id                 : string;
+    external_reference : string;
+    status             : string;
+    total_paid_amount  : Extended;
+end;
+
+
 type
   TDTMercadoPagoTEF = class(TComponent)
   private
@@ -122,6 +179,8 @@ type
     FExpira                : TDateTime;
     FHabilitaLOG: Boolean;
     FCaminhoLOG: string;
+    FUserID_SH: String;
+
 
     procedure SetAccessToken(const Value: String);
     procedure SetClientID(const Value: string);
@@ -133,6 +192,8 @@ type
     procedure SetCaminhoArquivoToken(const Value: string);
     procedure SetExpira(const Value: TDateTime);
     procedure Log(Mensagem: string);
+    function ExtrairSellerID(const str: string): string;
+    procedure setUserID_SH(const Value: String);
 
   protected
 
@@ -145,6 +206,10 @@ type
     ObterExtorno   : TExtorno;
     Cancelamento   : TCancelamento;
     ListaPagamentos: TList<TListaPagamentos>;
+    DadosLoja      : TList<TDadosLoja>;
+    DadosCaixa     : TList<TdadosCaixa>;
+    DadosPgtoPIX   : TPgtoPIX;
+    PixDetalhes    : TList<TDadosPgtoPIX>;
     procedure AutorizarAplicacao;
     function CreateAccessToken: String;
     function CreateRefreshToken: String;
@@ -159,6 +224,18 @@ type
     function GetPaymentsList(const ADays: Integer): TListaPagamentos;
     function GetToken:Boolean;
 
+    function PIXCriarLoja(NomeDaLoja, IDLoja , Endereco, numero, Cidade, UF, Latitude, Longitude, Referencia : String) : TDadosLoja;
+    function PIXBuscarLojas : TDadosLoja;
+    function PIXExcluirLoja(IdLoja : string) : Boolean;
+
+    function PIXCriarCaixa(idCaixa, NomeCaixa, idLoja, IDNumberLOJA : String): TdadosCaixa;
+    function PIXBuscarCaixa : TdadosCaixa;
+    function PIXExcluirCaixa(IdCaixa : string) : Boolean;
+
+    function PIXCriarPagamento(nVenda, DescricaoVenda,NomeEmpresa,external_id : string; TotalVenda : Extended ): string;
+    function PIXBuscaPagamento (External_Reference : string): string;
+    function PIXBuscaPagamentoDetalhado(payment_id : string) : string;
+
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
@@ -169,6 +246,7 @@ type
    property TGCode                : String     read FTGCode                 write SetTGCode;
    property AccessToken           : String     read FAccessToken            write SetAccessToken;
    property RefreshToken          : String     read FRefreshToken           write SetRefreshToken;
+   property UserID_SH             : String     read FUserID_SH              write setUserID_SH;
    property HabilitaControleToken : Boolean    read FHabilitaControleToken  write SetHabilitaControleToken;
    property CaminhoArquivoToken   : string     read FCaminhoArquivoToken    write SetCaminhoArquivoToken;
    property Expira                : TDateTime  read FExpira                 write SetExpira;
@@ -190,6 +268,18 @@ begin
 end;
 
 { TDTMercadoPagoTEF }
+
+function TDTMercadoPagoTEF.ExtrairSellerID(const str: string): string;
+var
+  posHifen: Integer;
+begin
+  posHifen := LastDelimiter('-', str);
+
+  if posHifen = 0 then
+    Result := 'Erro: Hífen não encontrado'
+  else
+    Result := Copy(str, posHifen + 1, Length(str) - posHifen);
+end;
 
 function TDTMercadoPagoTEF.GetPaymentsList(const ADays: Integer): TListaPagamentos;
 var
@@ -407,6 +497,7 @@ begin
           FAccessToken  := IniFile.ReadString('Config', 'accesstoken'  , '');
           FRefreshToken := IniFile.ReadString('Config', 'refreshtoken' , '');
           FExpira       := IniFile.ReadDate(  'Config', 'expira'       , Now);
+          FUserID_SH    := IniFile.ReadString('Config', 'userid'       , '');
         finally
           IniFile.Free;
         end;
@@ -800,9 +891,11 @@ end;
 constructor TDTMercadoPagoTEF.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-
   Devices         := Tlist<TDevices>.Create;
   ListaPagamentos := TList<TListaPagamentos>.Create;
+  DadosLoja       := TList<TDadosLoja>.Create;
+  DadosCaixa      := TList<TdadosCaixa>.Create;
+  PixDetalhes     := TList<TDadosPgtoPIX>.create;
 end;
 
 function TDTMercadoPagoTEF.CreateAccessToken: String;
@@ -849,6 +942,7 @@ begin
             IniFile.WriteString('Config', 'accesstoken'  , FAccessToken);
             IniFile.WriteString('Config', 'refreshtoken' , FRefreshToken);
             IniFile.WriteDate(  'Config', 'expira'       , IncDay(now,179));
+            IniFile.WriteString('Config', 'userid'       , FUserID_SH);
           finally
             IniFile.Free;
           end;
@@ -904,6 +998,702 @@ begin
     end;
 end;
 
+function TDTMercadoPagoTEF.PIXBuscaPagamento(External_Reference : string): string;
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+  lc           : TdadosCaixa;
+  JSONArray    : TJSONArray;
+  i ,x         : integer;
+  pgto         : TDadosPgtoPIX;
+  obj          : TJSONObject;
+  JSONArr      : TJSONArray;
+  OK           : Boolean;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+    ok                     := False;
+    RequestBody            := TStringStream.Create('');
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Get(_BASE_URL + _BUSCAR_PGTO_PIX.Replace('{external_reference}', External_Reference),RequestBody,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('[ERRO AO BUSCAR CAIXA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+     JSONArray        := JSONResponse.GetValue('elements') as TJSONArray;
+
+     PixDetalhes.Clear;
+
+     for I := 0 to Pred( JSONArray.Count ) do
+     begin
+         ok      := False;
+         obj     := TJsonObject.ParseJSONValue(JSONArray.Items[I].ToString) as TJsonObject;
+         JSONArr := obj.GetValue('payments') as TJSONArray;
+
+         pgto                    := TDadosPgtoPIX.Create;
+         pgto.id                 := JSONArray[i].GetValue<string>('id');
+         pgto.external_reference := JSONArray[i].GetValue<string>('external_reference');
+         for x := 0 to Pred( JSONArr.Count ) do
+         begin
+              pgto.id                 := JSONArr[x].GetValue<string>('id');
+              pgto.status             := JSONArr[x].GetValue<string>('status');
+              pgto.total_paid_amount  := JSONArr[x].GetValue<Double>('total_paid_amount');
+              OK                      := True;
+         end;
+
+         if not ok then
+         begin
+            pgto.status             := 'no';
+            pgto.total_paid_amount  := 0;
+         end;
+
+         PixDetalhes.Add(pgto);
+     end;
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXBuscaPagamentoDetalhado(
+  payment_id: string): string;
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+  lc           : TdadosCaixa;
+  JSONArray    : TJSONArray;
+  i ,x         : integer;
+  pgto         : TDadosPgtoPIX;
+  obj          : TJSONObject;
+  JSONArr      : TJSONArray;
+  OK           : Boolean;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create('');
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Get(_BASE_URL + _BUSCAR_PGTO_PIX_DETALHADAO.Replace('{payment_id}',payment_id),RequestBody,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('[ERRO AO BUSCAR CAIXA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+     Result           := Response.ContentAsString;
+//     JSONArray        := JSONResponse.GetValue('elements') as TJSONArray;
+//
+//     PixDetalhes.Clear;
+//
+//     for I := 0 to Pred( JSONArray.Count ) do
+//     begin
+//         ok      := False;
+//         obj     := TJsonObject.ParseJSONValue(JSONArray.Items[I].ToString) as TJsonObject;
+//         JSONArr := obj.GetValue('payments') as TJSONArray;
+//
+//         pgto                    := TDadosPgtoPIX.Create;
+//         pgto.id                 := JSONArray[i].GetValue<string>('id');
+//         pgto.external_reference := JSONArray[i].GetValue<string>('external_reference');
+//         for x := 0 to Pred( JSONArr.Count ) do
+//         begin
+//              pgto.id                 := JSONArray[i].GetValue<string>('id');
+//              pgto.status             := JSONArr[x].GetValue<string>('status');
+//              pgto.total_paid_amount  := JSONArr[x].GetValue<Double>('total_paid_amount');
+//              OK                      := True;
+//         end;
+//
+//         if not ok then
+//         begin
+//            pgto.status             := 'no';
+//            pgto.total_paid_amount  := 0;
+//         end;
+//
+//         PixDetalhes.Add(pgto);
+//     end;
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXBuscarCaixa: TdadosCaixa;
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+  lc           : TdadosCaixa;
+  JSONArray    : TJSONArray;
+  i            : integer;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create('');
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Get(_BASE_URL + _BUSCAR_CAIXA_PIX,RequestBody,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('[ERRO AO BUSCAR CAIXA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+     JSONArray       := JSONResponse.GetValue('results') as TJSONArray;
+
+     DadosCaixa.Clear;
+
+     for I := 0 to Pred( JSONArray.Count ) do
+     begin
+         lc                   := TdadosCaixa.Create;
+         lc.Mensagem          := Response.ContentAsString;
+         lc.image             := JSONArray[i].GetValue<string>('qr.image');
+         lc.template_document := JSONArray[i].GetValue<string>('qr.template_document');
+         lc.template_image    := JSONArray[i].GetValue<string>('qr.template_image');
+         lc.id                := JSONArray[i].GetValue<string>('id');
+         lc.date_created      := JSONArray[i].GetValue<string>('date_created');
+         lc.date_last_updated := JSONArray[i].GetValue<string>('date_last_updated');
+         lc.user_id           := JSONArray[i].GetValue<string>('user_id');
+         lc.name              := JSONArray[i].GetValue<string>('name');
+         if JSONArray[i].TryGetValue<string>('store_id', lc.store_id) then
+         lc.store_id          := JSONArray[i].GetValue<string>('store_id');
+
+         DadosCaixa.Add(lc);
+     end;
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXBuscarLojas: TDadosLoja;
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+  JSONArray    : TJSONArray;
+  lj           : TDadosLoja;
+  i            : Integer;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+    RequestBody            := TStringStream.Create('');
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Get(_BASE_URL + _BUSCAR_LOJA_PIX.Replace('{seller_id}', ExtrairSellerID(FTGCode)) ,nil,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('[ERRO AO BUSCAR LOJA]');
+
+      JSONResponse := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+      JSONArray := JSONResponse.GetValue('results') as TJSONArray;
+
+      DadosLoja.Clear;
+
+      for I := 0 to Pred( JSONArray.Count ) do
+      begin
+           lj               := TDadosLoja.Create;
+           lj.id            := JSONArray[i].GetValue<String>('id');
+           lj.name          := JSONArray[i].GetValue<String>('name');
+           lj.date_creation := JSONArray[i].GetValue<String>('date_creation');
+           lj.address_line  := JSONArray[i].GetValue<String>('location.address_line');
+           lj.reference     := JSONArray[i].GetValue<String>('location.reference');
+           lj.latitude      := StrToFloat( JSONArray[i].GetValue<String>('location.latitude').Replace('.',',') );
+           lj.longitude     := StrToFloat( JSONArray[i].GetValue<String>('location.longitude').Replace('.',',') );
+           if JSONArray[i].TryGetValue<String>('location.city', lj.city) then
+           lj.city          := JSONArray[i].GetValue<String>('location.city');
+           if JSONArray[i].TryGetValue<String>('location.state_id', lj.state_id) then
+           lj.state_id      := JSONArray[i].GetValue<String>('location.state_id');
+           if JSONArray[i].TryGetValue<String>('external_id', lj.external_id) then
+           lj.external_id   := JSONArray[i].GetValue<String>('external_id');
+
+           DadosLoja.Add(lj);
+      end;
+
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXCriarCaixa(idCaixa, NomeCaixa, idLoja,
+  IDNumberLOJA : String): TdadosCaixa;
+const JsonBody =  ' { ' +
+                  ' "category":null, ' +
+                  ' "external_id":"%s", ' +
+                  ' "external_store_id":"%s", ' +
+                  ' "fixed_amount":false, ' +
+                  ' "name":"%s", ' +
+                  ' "store_id":"%s" ' +
+                  ' } ';
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+  lc           : TdadosCaixa;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create(Format(JsonBody,[idCaixa, idLoja, NomeCaixa, IDNumberLOJA]));
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Post(_BASE_URL + _CRIAR_CAIXA_PIX,RequestBody,nil,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 201 then
+      raise Exception.Create('[ERRO AO CRIAR CAIXA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+     DadosCaixa.Clear;
+
+     lc                   := TdadosCaixa.Create;
+     lc.Mensagem          := Response.ContentAsString;
+     lc.image             := JSONResponse.GetValue<string>('qr.image');
+     lc.template_document := JSONResponse.GetValue<string>('qr.template_document');
+     lc.template_image    := JSONResponse.GetValue<string>('qr.template_image');
+     lc.id                := JSONResponse.GetValue('id').Value;
+     lc.status            := JSONResponse.GetValue('status').Value;
+     lc.date_created      := JSONResponse.GetValue('date_created').Value;
+     lc.date_last_updated := JSONResponse.GetValue('date_last_updated').Value;
+     lc.uuid              := JSONResponse.GetValue('uuid').Value;
+     lc.user_id           := JSONResponse.GetValue('user_id').Value;
+     lc.name              := JSONResponse.GetValue('name').Value;
+     lc.store_id          := JSONResponse.GetValue('store_id').Value;
+    // lc.external_store_id := JSONResponse.GetValue('external_store_id').Value;
+     lc.external_id       := JSONResponse.GetValue('external_id').Value;
+     lc.site              := JSONResponse.GetValue('site').Value;
+     lc.qr_code           := JSONResponse.GetValue('qr_code').Value;
+
+     DadosCaixa.Add(lc);
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXCriarLoja(NomeDaLoja, IDLoja, Endereco, numero,
+  Cidade, UF, Latitude, Longitude, Referencia: String): TDadosLoja;
+const JsonBody =  '{' +
+                  '"external_id": "%s",' +
+                  '"location": {' +
+                  '"street_number": "%s",' +
+                  '"street_name": "%s",' +
+                  '"city_name": "%s",' +
+                  '"state_name": "%s",' +
+                  '"latitude": %s,' +
+                  '"longitude": %s,' +
+                  '"reference": "%s"' +
+                  '}, ' +
+                  '"name": "%s"}';
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+  lj           : TDadosLoja;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create(Format(JsonBody,[IDLoja, numero, Endereco, Cidade, UF, Latitude, Longitude, Referencia, NomeDaLoja]));
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Post(_BASE_URL + _CRIAR_LOJA_PIX.Replace('{seller_id}', ExtrairSellerID(FTGCode)) ,RequestBody,nil,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 201 then
+      raise Exception.Create('[ERRO AO CRIAR LOJA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+     DadosLoja.Clear;
+
+     lj               := TDadosLoja.Create;
+     lj.Mensagem      := Response.ContentAsString;
+     lj.id            := JSONResponse.GetValue('id').Value;
+     lj.name          := JSONResponse.GetValue('name').Value;
+     lj.date_creation := JSONResponse.GetValue('date_creation').Value;
+     lj.address_line  := JSONResponse.GetValue<string>('location.address_line');
+     lj.reference     := JSONResponse.GetValue<string>('location.reference');
+     lj.latitude      := StrToFloat( JSONResponse.GetValue<string>('location.latitude').Replace('.',',') );
+     lj.longitude     := StrToFloat( JSONResponse.GetValue<string>('location.longitude').Replace('.',',') );
+     lj.city          := JSONResponse.GetValue<string>('location.city');
+     lj.state_id      := JSONResponse.GetValue<string>('location.state_id');
+     lj.external_id   := JSONResponse.GetValue('external_id').Value;
+
+     DadosLoja.Add(lj);
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXCriarPagamento(nVenda, DescricaoVenda,NomeEmpresa,external_id : string; TotalVenda : Extended ): string;
+const
+  JsonBody =
+    '{' +
+      '"cash_out": {' +
+        '"amount":0' +
+      '},' +
+      '"external_reference":"%s",' +
+      '"description":"%s",' +
+      '"items": [' +
+        '{' +
+          '"sku_number":"1",' +
+          '"category":"Venda CashBox",' +
+          '"title":"Venda CashBox",' +
+          '"description":"Venda CashBox",' +
+          '"unit_measure":"Unidade",' +
+          '"quantity":1,' +
+          '"unit_price":%s,' +
+          '"total_amount":%s ' +
+        '}' +
+      '],' +
+      '"notification_url":null,' +
+      '"expiration_date":"%s",' +
+      '"sponsor": {' +
+        '"id":%s' +
+      '},' +
+      '"title":"%s",' +
+      '"total_amount":%s ' +
+    '}';
+
+
+var
+  xItensJson        : string;
+  HttpClient        : THTTPClient;
+  Response          : IHTTPResponse;
+  RequestURL        : string;
+  JsonRequest       : TJSONObject;
+  RequestBody       : TStringStream;
+  JSONResponse      : TJSONObject;
+  lj                : TDadosLoja;
+  CurrentDateTime   : TDateTime;
+  FormattedDateTime : string;
+begin
+  CurrentDateTime   := Now;
+  CurrentDateTime   := IncMinute(CurrentDateTime, 5);
+  FormattedDateTime := FormatDateTime('yyyy-mm-dd"T"hh:nn:ss.zzz-04:00', CurrentDateTime);
+
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create(Format(JsonBody,[nVenda, DescricaoVenda, TotalVenda.ToString.Replace('.','').Replace(',','.'), TotalVenda.ToString.Replace('.','').Replace(',','.'), FormattedDateTime, FUserID_SH ,DescricaoVenda,TotalVenda.ToString.Replace('.','').Replace(',','.') ]));
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Post(_BASE_URL + _CRIAR_PGTO_PIX.Replace('{seller_id}', ExtrairSellerID(FTGCode)).Replace('{external_id}',external_id ) ,RequestBody,nil,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 201 then
+      raise Exception.Create('[ERRO AO CRIAR PAGTO PIX]');
+
+     JSONResponse                   := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+     DadosPgtoPIX.Mensagem          := Response.ContentAsString;
+     DadosPgtoPIX.in_store_order_id := JSONResponse.GetValue('in_store_order_id').value;
+     DadosPgtoPIX.qr_data           := JSONResponse.GetValue('qr_data').value;
+
+  except
+    on E: Exception do
+    begin
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXExcluirCaixa(IdCaixa: string): Boolean;
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create('');
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Delete(_BASE_URL + _EXCLUIR_CAIXA_PIX.Replace('{caixa_id}', IdCaixa) ,RequestBody,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 204 then
+      raise Exception.Create('[ERRO AO EXCLUIR CAIXA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+     Result           := True;
+
+  except
+    on E: Exception do
+    begin
+      Result := False;
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
+function TDTMercadoPagoTEF.PIXExcluirLoja(IdLoja: string): Boolean;
+var
+  HttpClient   : THTTPClient;
+  Response     : IHTTPResponse;
+  RequestURL   : string;
+  JsonRequest  : TJSONObject;
+  RequestBody  : TStringStream;
+  JSONResponse : TJSONObject;
+begin
+   if FHabilitaControleToken then
+       GetToken;
+
+  HttpClient  := THTTPClient.Create;
+  JsonRequest := TJSONObject.Create;
+
+  try
+
+    RequestBody            := TStringStream.Create('');
+
+    HttpClient             := THttpClient.Create;
+    HttpClient.ContentType := 'application/json';
+
+    Response := HttpClient.Delete(_BASE_URL + _EXCLUIR_LOJA_PIX.Replace('{seller_id}', ExtrairSellerID(FTGCode)).Replace('{store_id}', IdLoja) ,RequestBody,
+                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+
+    if FHabilitaLOG then
+       Log(Response.ContentAsString);
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('[ERRO AO EXCLUIR LOJA]');
+
+     JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+     Result           := True;
+
+  except
+    on E: Exception do
+    begin
+      Result := False;
+      if FHabilitaLOG then
+       Log(E.Message);
+
+      if Response = nil then
+        raise Exception.Create(E.Message)
+      else
+        raise Exception.Create(E.Message + sLineBreak + Response.ContentAsString);
+    end;
+  end;
+
+  HttpClient.Free;
+  JsonRequest.Free;
+  RequestBody.Free;
+
+end;
+
 function TDTMercadoPagoTEF.CreateRefreshToken: String;
 var
   LResponse    : IHTTPResponse;
@@ -947,6 +1737,7 @@ begin
             IniFile.WriteString('Config', 'accesstoken'  , FAccessToken);
             IniFile.WriteString('Config', 'refreshtoken' , FRefreshToken);
             IniFile.WriteDate(  'Config', 'expira'       , IncDay(now,179));
+            IniFile.WriteString('Config', 'userid'       , FUserID_SH);
           finally
             IniFile.Free;
           end;
@@ -972,9 +1763,15 @@ destructor TDTMercadoPagoTEF.Destroy;
 begin
   Devices.Clear;
   ListaPagamentos.Clear;
+  DadosLoja.Clear;
+  DadosCaixa.Clear;
+  PixDetalhes.Clear;
 
   FreeAndNil(Devices);
   FreeAndNil(ListaPagamentos);
+  FreeAndNil(DadosLoja);
+  FreeAndNil(DadosCaixa);
+  FreeAndNil(PixDetalhes);
 
   inherited Destroy;
 end;
@@ -1024,6 +1821,14 @@ begin
   FTGCode := Value;
 end;
 
+procedure TDTMercadoPagoTEF.setUserID_SH(const Value: String);
+begin
+  FUserID_SH := Value;
+end;
+
 end.
+
+
+
 
 
