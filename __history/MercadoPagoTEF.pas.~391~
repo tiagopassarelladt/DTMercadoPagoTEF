@@ -326,26 +326,26 @@ begin
          Obj                    := Dados.Items[I] as TJSONObject;
 
          lst                    := TListaPagamentos.Create;
-         lst.payment_intent_id  := Obj.GetValue<string>('metadata.payment_intent_id');
-         lst.external_reference := Obj.GetValue<string>('external_reference');
-         lst.payment_method_id  := Obj.GetValue<string>('payment_method_id');
-         lst.payment_type_id    := Obj.GetValue<string>('payment_type_id');
-         lst.status             := Obj.GetValue<string>('status');
-         lst.status_detail      := Obj.GetValue<string>('status_detail');
-         lst.serial_number      := Obj.GetValue<string>('point_of_interaction.device.serial_number');
-         lst.first_name         := Obj.GetValue<string>('payer.first_name');
-         lst.last_name          := Obj.GetValue<string>('payer.last_name');
-         lst.email              := Obj.GetValue<string>('payer.email');
-         lst.total_paid_amount  := StrToFloat( Obj.GetValue<string>('transaction_details.total_paid_amount').Replace('.',',') );
-         lst.id_payment         := Obj.GetValue<string>('payment_method.id');
-         lst.type_payment       := Obj.GetValue<string>('payment_method.type');
-         lst.date_created       := Obj.GetValue<string>('card.date_created');
-         lst.first_six_digits   := Obj.GetValue<string>('card.first_six_digits');
-         lst.last_four_digits   := Obj.GetValue<string>('card.last_four_digits');
-         lst.expiration_month   := Obj.GetValue<string>('card.expiration_month');
-         lst.expiration_year    := Obj.GetValue<string>('card.expiration_year');
-         lst.soft_descriptor    := Obj.GetValue<string>('expanded.gateway.soft_descriptor');
-         lst.id_intPayment      := Obj.GetValue<string>('expanded.gateway.id');
+         lst.payment_intent_id  := Obj.GetValue('metadata.payment_intent_id').Value;
+         lst.external_reference := Obj.GetValue('external_reference').Value;
+         lst.payment_method_id  := Obj.GetValue('payment_method_id').Value;
+         lst.payment_type_id    := Obj.GetValue('payment_type_id').Value;
+         lst.status             := Obj.GetValue('status').Value;
+         lst.status_detail      := Obj.GetValue('status_detail').Value;
+         lst.serial_number      := Obj.GetValue('point_of_interaction.device.serial_number').Value;
+         lst.first_name         := Obj.GetValue('payer.first_name').Value;
+         lst.last_name          := Obj.GetValue('payer.last_name').Value;
+         lst.email              := Obj.GetValue('payer.email').Value;
+         lst.total_paid_amount  := StrToFloat( Obj.GetValue('transaction_details.total_paid_amount').Value.Replace('.',',') );
+         lst.id_payment         := Obj.GetValue('payment_method.id').Value;
+         lst.type_payment       := Obj.GetValue('payment_method.type').Value;
+         lst.date_created       := Obj.GetValue('card.date_created').Value;
+         lst.first_six_digits   := Obj.GetValue('card.first_six_digits').Value;
+         lst.last_four_digits   := Obj.GetValue('card.last_four_digits').Value;
+         lst.expiration_month   := Obj.GetValue('card.expiration_month').Value;
+         lst.expiration_year    := Obj.GetValue('card.expiration_year').Value;
+         lst.soft_descriptor    := Obj.GetValue('expanded.gateway.soft_descriptor').Value;
+         lst.id_intPayment      := Obj.GetValue('expanded.gateway.id').Value;
          ListaPagamentos.Add(lst);
     end;
 
@@ -824,6 +824,7 @@ var
   JSONArray   : TJSONArray;
   JSONObject  : TJSONObject;
   I           : integer;
+  obj         : TJsonObject;
 begin
   LClient     := THTTPClient.Create;
   JSONArray   := TJSONArray.Create;
@@ -845,16 +846,18 @@ begin
           raise Exception.Create('[ERRO AO LER DEVICES]');
 
           JSONObject := TJSONObject.ParseJSONValue(LResponse.ContentAsString) as TJSONObject;
-          JSONArray := JSONObject.GetValue('devices') as TJSONArray;
+          JSONArray  := JSONObject.GetValue('devices') as TJSONArray;
 
           for I := 0 to Pred( JSONArray.Count ) do
           begin
+                obj                    := TJsonObject.ParseJSONValue(JSONArray.Items[I].ToString) as TJsonObject;
+
                 Device                 := TDevices.Create;
-                Device.id              := JSONArray[i].GetValue<String>('id');
-                Device.pos_id          := JSONArray[i].GetValue<Integer>('pos_id');
-                Device.store_id        := JSONArray[i].GetValue<Integer>('store_id');
-                Device.external_pos_id := JSONArray[i].GetValue<String>('external_pos_id');
-                Device.operating_mode  := JSONArray[i].GetValue<String>('operating_mode');
+                Device.id              := obj.GetValue('id').Value;
+                Device.pos_id          := obj.GetValue('pos_id').Value.ToInteger;
+                Device.store_id        := obj.GetValue('store_id').Value.ToInteger;
+                Device.external_pos_id := obj.GetValue('external_pos_id').Value;
+                Device.operating_mode  := obj.GetValue('operating_mode').Value;
 
                 Devices.Add(Device);
           end;
@@ -1010,7 +1013,7 @@ var
   JSONArray    : TJSONArray;
   i ,x         : integer;
   pgto         : TDadosPgtoPIX;
-  obj          : TJSONObject;
+  obj,obj2     : TJSONObject;
   JSONArr      : TJSONArray;
   OK           : Boolean;
 begin
@@ -1048,12 +1051,14 @@ begin
          JSONArr := obj.GetValue('payments') as TJSONArray;
 
          pgto                    := TDadosPgtoPIX.Create;
-         pgto.id                 := JSONArray[i].GetValue<string>('id');
-         pgto.external_reference := JSONArray[i].GetValue<string>('external_reference');
+         pgto.id                 := obj.GetValue('id').Value;
+         pgto.external_reference := obj.GetValue('external_reference').Value;
          for x := 0 to Pred( JSONArr.Count ) do
          begin
-              pgto.status             := JSONArray[i].GetValue<string>('payments.[0].status');
-              pgto.total_paid_amount  := JSONArray[i].GetValue<Double>('payments0.[0].total_paid_amount');
+              obj2                    := TJsonObject.ParseJSONValue(JSONArr.Items[x].ToString) as TJsonObject;
+              pgto.id                 := obj2.GetValue('id').Value;
+              pgto.status             := obj2.GetValue('status').Value;
+              pgto.total_paid_amount  := StrToFloat(obj2.GetValue('total_paid_amount').Value.Replace('.',','));
               OK                      := True;
          end;
 
@@ -1095,7 +1100,11 @@ var
   JSONResponse : TJSONObject;
   lc           : TdadosCaixa;
   JSONArray    : TJSONArray;
-  i            : integer;
+  i ,x         : integer;
+  pgto         : TDadosPgtoPIX;
+  obj          : TJSONObject;
+  JSONArr      : TJSONArray;
+  OK           : Boolean;
 begin
    if FHabilitaControleToken then
        GetToken;
@@ -1110,8 +1119,8 @@ begin
     HttpClient             := THttpClient.Create;
     HttpClient.ContentType := 'application/json';
 
-    Response := HttpClient.Get(_BASE_URL + _BUSCAR_PGTO_PIX_DETALHADAO,RequestBody,
-                                TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
+    Response := HttpClient.Get(_BASE_URL + _BUSCAR_PGTO_PIX_DETALHADAO.Replace('{payment_id}',payment_id),RequestBody,
+                               TNetHeaders.Create(TNameValuePair.Create('Authorization', 'Bearer ' + FAccessToken)) );
 
     if FHabilitaLOG then
        Log(Response.ContentAsString);
@@ -1120,27 +1129,8 @@ begin
       raise Exception.Create('[ERRO AO BUSCAR CAIXA]');
 
      JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
-//     JSONArray       := JSONResponse.GetValue('results') as TJSONArray;
-//
-//     DadosCaixa.Clear;
-//
-//     for I := 0 to Pred( JSONArray.Count ) do
-//     begin
-//         lc                   := TdadosCaixa.Create;
-//         lc.Mensagem          := Response.ContentAsString;
-//         lc.image             := JSONArray[i].GetValue<string>('qr.image');
-//         lc.template_document := JSONArray[i].GetValue<string>('qr.template_document');
-//         lc.template_image    := JSONArray[i].GetValue<string>('qr.template_image');
-//         lc.id                := JSONArray[i].GetValue<string>('id');
-//         lc.date_created      := JSONArray[i].GetValue<string>('date_created');
-//         lc.date_last_updated := JSONArray[i].GetValue<string>('date_last_updated');
-//         lc.user_id           := JSONArray[i].GetValue<string>('user_id');
-//         lc.name              := JSONArray[i].GetValue<string>('name');
-//         if JSONArray[i].TryGetValue<string>('store_id', lc.store_id) then
-//         lc.store_id          := JSONArray[i].GetValue<string>('store_id');
-//
-//         DadosCaixa.Add(lc);
-//     end;
+     Result           := Response.ContentAsString;
+
   except
     on E: Exception do
     begin
@@ -1171,6 +1161,7 @@ var
   lc           : TdadosCaixa;
   JSONArray    : TJSONArray;
   i            : integer;
+  obj          : TJSONObject;
 begin
    if FHabilitaControleToken then
        GetToken;
@@ -1195,24 +1186,25 @@ begin
       raise Exception.Create('[ERRO AO BUSCAR CAIXA]');
 
      JSONResponse     := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
-     JSONArray       := JSONResponse.GetValue('results') as TJSONArray;
+     JSONArray        := JSONResponse.GetValue('results') as TJSONArray;
 
      DadosCaixa.Clear;
 
      for I := 0 to Pred( JSONArray.Count ) do
      begin
+         obj                  := TJsonObject.ParseJSONValue(JSONArray.Items[I].ToString) as TJsonObject;
          lc                   := TdadosCaixa.Create;
          lc.Mensagem          := Response.ContentAsString;
-         lc.image             := JSONArray[i].GetValue<string>('qr.image');
-         lc.template_document := JSONArray[i].GetValue<string>('qr.template_document');
-         lc.template_image    := JSONArray[i].GetValue<string>('qr.template_image');
-         lc.id                := JSONArray[i].GetValue<string>('id');
-         lc.date_created      := JSONArray[i].GetValue<string>('date_created');
-         lc.date_last_updated := JSONArray[i].GetValue<string>('date_last_updated');
-         lc.user_id           := JSONArray[i].GetValue<string>('user_id');
-         lc.name              := JSONArray[i].GetValue<string>('name');
-         if JSONArray[i].TryGetValue<string>('store_id', lc.store_id) then
-         lc.store_id          := JSONArray[i].GetValue<string>('store_id');
+         lc.image             := obj.GetValue('qr.image').Value;
+         lc.template_document := obj.GetValue('qr.template_document').Value;
+         lc.template_image    := obj.GetValue('qr.template_image').Value;
+         lc.id                := obj.GetValue('id').Value;
+         lc.date_created      := obj.GetValue('date_created').Value;
+         lc.date_last_updated := obj.GetValue('date_last_updated').Value;
+         lc.user_id           := obj.GetValue('user_id').Value;
+         lc.name              := obj.GetValue('name').Value;
+         if obj.TryGetValue('store_id', lc.store_id) then
+         lc.store_id          := obj.GetValue('store_id').Value;
 
          DadosCaixa.Add(lc);
      end;
@@ -1246,6 +1238,7 @@ var
   JSONArray    : TJSONArray;
   lj           : TDadosLoja;
   i            : Integer;
+  obj          : TJSONObject;
 begin
    if FHabilitaControleToken then
        GetToken;
@@ -1275,20 +1268,21 @@ begin
 
       for I := 0 to Pred( JSONArray.Count ) do
       begin
+           obj              := TJsonObject.ParseJSONValue(JSONArray.Items[I].ToString) as TJsonObject;
            lj               := TDadosLoja.Create;
-           lj.id            := JSONArray[i].GetValue<String>('id');
-           lj.name          := JSONArray[i].GetValue<String>('name');
-           lj.date_creation := JSONArray[i].GetValue<String>('date_creation');
-           lj.address_line  := JSONArray[i].GetValue<String>('location.address_line');
-           lj.reference     := JSONArray[i].GetValue<String>('location.reference');
-           lj.latitude      := StrToFloat( JSONArray[i].GetValue<String>('location.latitude').Replace('.',',') );
-           lj.longitude     := StrToFloat( JSONArray[i].GetValue<String>('location.longitude').Replace('.',',') );
-           if JSONArray[i].TryGetValue<String>('location.city', lj.city) then
-           lj.city          := JSONArray[i].GetValue<String>('location.city');
-           if JSONArray[i].TryGetValue<String>('location.state_id', lj.state_id) then
-           lj.state_id      := JSONArray[i].GetValue<String>('location.state_id');
+           lj.id            := obj.GetValue('id').Value;
+           lj.name          := obj.GetValue('name').Value;
+           lj.date_creation := obj.GetValue('date_creation').Value;
+           lj.address_line  := obj.GetValue('location.address_line').Value;
+           lj.reference     := obj.GetValue('location.reference').Value;
+           lj.latitude      := StrToFloat( obj.GetValue('location.latitude').Value.Replace('.',',') );
+           lj.longitude     := StrToFloat( obj.GetValue('location.longitude').Value.Replace('.',',') );
+           if obj.TryGetValue('location.city', lj.city) then
+           lj.city          := obj.GetValue('location.city').Value;
+           if obj.TryGetValue('location.state_id', lj.state_id) then
+           lj.state_id      := obj.GetValue('location.state_id').Value;
            if JSONArray[i].TryGetValue<String>('external_id', lj.external_id) then
-           lj.external_id   := JSONArray[i].GetValue<String>('external_id');
+           lj.external_id   := obj.GetValue('external_id').Value;
 
            DadosLoja.Add(lj);
       end;
@@ -1330,6 +1324,7 @@ var
   RequestBody  : TStringStream;
   JSONResponse : TJSONObject;
   lc           : TdadosCaixa;
+  obj          : TJSONObject;
 begin
    if FHabilitaControleToken then
        GetToken;
@@ -1359,9 +1354,9 @@ begin
 
      lc                   := TdadosCaixa.Create;
      lc.Mensagem          := Response.ContentAsString;
-     lc.image             := JSONResponse.GetValue<string>('qr.image');
-     lc.template_document := JSONResponse.GetValue<string>('qr.template_document');
-     lc.template_image    := JSONResponse.GetValue<string>('qr.template_image');
+     lc.image             := JSONResponse.GetValue('qr.image').Value;
+     lc.template_document := JSONResponse.GetValue('qr.template_document').Value;
+     lc.template_image    := JSONResponse.GetValue('qr.template_image').Value;
      lc.id                := JSONResponse.GetValue('id').Value;
      lc.status            := JSONResponse.GetValue('status').Value;
      lc.date_created      := JSONResponse.GetValue('date_created').Value;
@@ -1370,7 +1365,6 @@ begin
      lc.user_id           := JSONResponse.GetValue('user_id').Value;
      lc.name              := JSONResponse.GetValue('name').Value;
      lc.store_id          := JSONResponse.GetValue('store_id').Value;
-    // lc.external_store_id := JSONResponse.GetValue('external_store_id').Value;
      lc.external_id       := JSONResponse.GetValue('external_id').Value;
      lc.site              := JSONResponse.GetValue('site').Value;
      lc.qr_code           := JSONResponse.GetValue('qr_code').Value;
@@ -1449,12 +1443,12 @@ begin
      lj.id            := JSONResponse.GetValue('id').Value;
      lj.name          := JSONResponse.GetValue('name').Value;
      lj.date_creation := JSONResponse.GetValue('date_creation').Value;
-     lj.address_line  := JSONResponse.GetValue<string>('location.address_line');
-     lj.reference     := JSONResponse.GetValue<string>('location.reference');
-     lj.latitude      := StrToFloat( JSONResponse.GetValue<string>('location.latitude').Replace('.',',') );
-     lj.longitude     := StrToFloat( JSONResponse.GetValue<string>('location.longitude').Replace('.',',') );
-     lj.city          := JSONResponse.GetValue<string>('location.city');
-     lj.state_id      := JSONResponse.GetValue<string>('location.state_id');
+     lj.address_line  := JSONResponse.GetValue('location.address_line').Value;
+     lj.reference     := JSONResponse.GetValue('location.reference').Value;
+     lj.latitude      := StrToFloat( JSONResponse.GetValue('location.latitude').Value.Replace('.',',') );
+     lj.longitude     := StrToFloat( JSONResponse.GetValue('location.longitude').Value.Replace('.',',') );
+     lj.city          := JSONResponse.GetValue('location.city').Value;
+     lj.state_id      := JSONResponse.GetValue('location.state_id').Value;
      lj.external_id   := JSONResponse.GetValue('external_id').Value;
 
      DadosLoja.Add(lj);
@@ -1813,6 +1807,8 @@ begin
 end;
 
 end.
+
+
 
 
 
