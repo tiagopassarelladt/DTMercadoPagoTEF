@@ -17,7 +17,7 @@ object Form1: TForm1
     Width = 695
     Height = 597
     Cursor = crHandPoint
-    ActivePage = TabSheet7
+    ActivePage = TabSheet1
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
@@ -8920,7 +8920,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        Text = '8955286240925737'
       end
       object edtClientSecret: TEdit
         Left = 78
@@ -8934,7 +8933,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        Text = 'vZPCLj2QplqDYJo6lJzHyMY9X9sW8q7C'
       end
       object edtRedirectUrl: TEdit
         Left = 78
@@ -8948,7 +8946,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 2
-        Text = 'https://www.passarellasistemas.com.br'
       end
       object edtTGCode: TEdit
         Left = 78
@@ -8962,7 +8959,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 3
-        Text = 'TG-65ae60e0f1d4a10001ba22fa-289283150'
       end
       object Memo1: TMemo
         Left = 3
@@ -8991,9 +8987,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 5
-        Text = 
-          'APP_USR-8955286240925737-012208-81eb455df884dcb6957edfddd3b4b765' +
-          '-289283150'
       end
       object edtRefreshToken: TEdit
         Left = 3
@@ -9007,7 +9000,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 6
-        Text = 'TG-65ae616c2cdcfd0001d14b50-289283150'
       end
       object btLimparCampos: TButton
         Left = 328
@@ -9061,7 +9053,6 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
         TabOrder = 11
-        Text = '1551341233'
       end
     end
     object TabSheet5: TTabSheet
@@ -45555,11 +45546,24 @@ object Form1: TForm1
         Font.Style = []
         ParentFont = False
       end
-      object Image2: TImage
+      object imQrCode: TImage
         Left = 439
         Top = 52
         Width = 193
         Height = 180
+      end
+      object Label55: TLabel
+        Left = 151
+        Top = 107
+        Width = 60
+        Height = 15
+        Caption = 'payment id'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
       end
       object Button8: TButton
         Left = 3
@@ -45673,13 +45677,27 @@ object Form1: TForm1
         Cursor = crHandPoint
         Caption = '3 - Busca Pgto detalhado'
         TabOrder = 8
+        OnClick = Button10Click
+      end
+      object edtPaymentID: TEdit
+        Left = 151
+        Top = 124
+        Width = 227
+        Height = 23
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 9
       end
     end
   end
-  object DTMercadoPagoTEF1: TDTMercadoPagoTEF
+  object P: TDTMercadoPagoTEF
     HabilitaControleToken = False
     HabilitaLOG = False
-    Left = 204
+    Left = 572
     Top = 218
   end
 end

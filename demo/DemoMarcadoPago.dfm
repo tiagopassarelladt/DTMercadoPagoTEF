@@ -17,7 +17,7 @@ object Form1: TForm1
     Width = 695
     Height = 597
     Cursor = crHandPoint
-    ActivePage = TabSheet6
+    ActivePage = TabSheet1
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
@@ -9071,8 +9071,6 @@ object Form1: TForm1
         Padding.Right = 5
         Padding.Bottom = 5
         TabOrder = 0
-        ExplicitWidth = 683
-        ExplicitHeight = 444
         object Label10: TLabel
           Left = 5
           Top = 5
@@ -9102,8 +9100,6 @@ object Form1: TForm1
           ParentFont = False
           ScrollBars = ssVertical
           TabOrder = 0
-          ExplicitWidth = 673
-          ExplicitHeight = 419
         end
       end
       object Panel2: TPanel
@@ -9116,7 +9112,6 @@ object Form1: TForm1
         Caption = 'Panel2'
         Padding.Right = 5
         TabOrder = 1
-        ExplicitWidth = 683
         object Label9: TLabel
           Left = 11
           Top = 8
@@ -45702,7 +45697,7 @@ object Form1: TForm1
   object DTMercadoPagoTEF1: TDTMercadoPagoTEF
     HabilitaControleToken = False
     HabilitaLOG = False
-    Left = 204
-    Top = 218
+    Left = 524
+    Top = 114
   end
 end

@@ -487,6 +487,8 @@ begin
       DTMercadoPagoTEF1.RefreshToken          := edtRefreshToken.Text;
       DTMercadoPagoTEF1.HabilitaControleToken := True;
       DTMercadoPagoTEF1.CaminhoArquivoToken   := 'C:\TEMP\CONFIG.INI';
+      DTMercadoPagoTEF1.HabilitaLOG           := True;
+      DTMercadoPagoTEF1.CaminhoLOG            := ExtractFilePath(Application.ExeName) + 'logMPTEF.txt';
 end;
 
 procedure TForm1.btListarTransacoesClick(Sender: TObject);

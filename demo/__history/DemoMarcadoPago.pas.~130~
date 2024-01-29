@@ -164,7 +164,9 @@ type
     Button9: TButton;
     Button10: TButton;
     imQrCode: TImage;
-    DTMercadoPagoTEF1: TDTMercadoPagoTEF;
+    P: TDTMercadoPagoTEF;
+    edtPaymentID: TEdit;
+    Label55: TLabel;
     procedure btLimparCamposClick(Sender: TObject);
     procedure btListarDevicesClick(Sender: TObject);
     procedure btnAccessTokenClick(Sender: TObject);
@@ -188,6 +190,7 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
   private
     procedure ConfiguraComponente;
   public
@@ -263,6 +266,13 @@ begin
            Memo3.Lines.Add(e.Message);
     end;
 end;
+procedure TForm1.Button10Click(Sender: TObject);
+begin
+      mRepPIX.Lines.Clear;
+      ConfiguraComponente;
+      mRepPIX.Text := DTMercadoPagoTEF1.PIXBuscaPagamentoDetalhado(edtPaymentID.Text);
+end;
+
 procedure TForm1.Button1Click(Sender: TObject);
 begin
     Memo4.Lines.Clear;
@@ -405,6 +415,7 @@ VAR
   QRCode            : TDelphiZXingQRCode;
   Row, Column       : Integer;
   imgXQrCode        : TBitmap;
+  Scale             : Double;
 begin
       mRepPIX.Lines.Clear;
       ConfiguraComponente;
@@ -435,17 +446,34 @@ begin
       end;
       imQrCode.Canvas.Brush.Color := clWhite;
       imQrCode.Canvas.FillRect(Rect(0, 0, imgXQrCode.Width, imgXQrCode.Height));
-
+      if (imQrCode.Width < imQrCode.Height) then
+      begin
+        Scale := imQrCode.Width / imgXQrCode.Width;
+      end else
+      begin
+        Scale := imQrCode.Height / imgXQrCode.Height;
+      end;
+      imQrCode.Canvas.StretchDraw(Rect(0, 0, Trunc(Scale * imgXQrCode.Width), Trunc(Scale * imgXQrCode.Height)), imgXQrCode);
 
       imgXQrCode.Free;
       QRCode.Free;
 end;
 
 procedure TForm1.Button9Click(Sender: TObject);
+var
+  I: Integer;
 begin
       mRepPIX.Lines.Clear;
       ConfiguraComponente;
-      DTMercadoPagoTEF1.PIXBuscaPagamento;
+      DTMercadoPagoTEF1.PIXBuscaPagamento(edtNumvenda.Text);
+      for I := 0 to Pred( DTMercadoPagoTEF1.PixDetalhes.Count ) do
+      begin
+          mRepPIX.Lines.Add( 'id: '                 + DTMercadoPagoTEF1.PixDetalhes[i].id );
+          mRepPIX.Lines.Add( 'external_reference: ' + DTMercadoPagoTEF1.PixDetalhes[i].external_reference );
+          mRepPIX.Lines.Add( 'status: '             + DTMercadoPagoTEF1.PixDetalhes[i].status );
+          mRepPIX.Lines.Add( 'total_paid_amount: '  + DTMercadoPagoTEF1.PixDetalhes[i].total_paid_amount.ToString );
+          mRepPIX.Lines.Add( StringOfChar('=',60));
+      end;
 end;
 
 procedure TForm1.ConfiguraComponente;
@@ -459,6 +487,8 @@ begin
       DTMercadoPagoTEF1.RefreshToken          := edtRefreshToken.Text;
       DTMercadoPagoTEF1.HabilitaControleToken := True;
       DTMercadoPagoTEF1.CaminhoArquivoToken   := 'C:\TEMP\CONFIG.INI';
+      DTMercadoPagoTEF1.HabilitaLOG           := True;
+      DTMercadoPagoTEF1.CaminhoLOG            := ExtractFilePath(Application.ExeName) + 'logMPTEF.txt';
 end;
 
 procedure TForm1.btListarTransacoesClick(Sender: TObject);
