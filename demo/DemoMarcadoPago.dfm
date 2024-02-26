@@ -17,7 +17,7 @@ object Form1: TForm1
     Width = 695
     Height = 597
     Cursor = crHandPoint
-    ActivePage = TabSheet1
+    ActivePage = TabSheet6
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWhite
@@ -45697,7 +45697,7 @@ object Form1: TForm1
   object DTMercadoPagoTEF1: TDTMercadoPagoTEF
     HabilitaControleToken = False
     HabilitaLOG = False
-    Left = 524
-    Top = 114
+    Left = 564
+    Top = 182
   end
 end
